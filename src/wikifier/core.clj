@@ -14,9 +14,11 @@
                                   (flatten [(cond title-match
                                                   (str "(:title " (second title-match) ":)"))
                                             "(:htoc:)"
-                                            "(:mathjax:)"                                            
+                                            "(:mathjax:)"
                                             "(:markdown:)"
-                                            (map (fn [line] (replace line #"\$(.*)\$" "{\\$$1\\$}")) (rest lines))
+                                            (map (fn [line] (replace (replace
+                                                                      (replace (replace line #"\$(.*)\$" "{\\$$1\\$}")
+                                                                               #"<->" "↔") #"->" "→") #"<-" "←")) (rest lines))
                                             "(:markdownend:)"]))]
         (.write output-file (str output-line "\n"))))))
 
